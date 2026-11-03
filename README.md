@@ -1,4 +1,5 @@
-# ShadowStrike Web
+# ShadowStrike Web — v4 SUNSET UPDATE
+
 
 An original third-person battle-royale-style browser game: you vs 49 bots on a big multi-town map.
 
@@ -19,3 +20,10 @@ An original third-person battle-royale-style browser game: you vs 49 bots on a b
 ## Performance notes
 
 Geometries and materials are reused, trees/rocks use instanced meshes, bot AI is staggered (12 bots per frame), and bots/pickups beyond draw distance are hidden while simulation continues. Graphics quality caps pixel ratio.
+
+## v4 (2026-11-04)
+
+- Big orange **v4** stamp on the start screen and small **v4** in the HUD, so the version is instantly provable.
+- `game.js?v=4` cache-busting so returning browsers do not silently serve an old build.
+- Phone-visible sunset look: warm sunset sky and fog, higher exposure and sun intensity, saturated grass/foliage, bigger trees, brighter lit windows, orange chest/gun accents. These show on Balanced too, not only on High/Ultra bloom.
+- Still 50 players (you + 49 bots), big map, landscape rotate overlay + orientation lock, all controls unchanged. Original art only; no DLSS, ray tracing, or COD-level claims.
