@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>ShadowStrike Web — Original 50-Player Battle Royale</title>
+<meta name="description" content="ShadowStrike Web: an original third-person battle-royale-style browser game — you vs 49 bots on a big map. Not affiliated with any commercial game.">
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;overflow:hidden;background:#0e1210;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#e8ecea}
+  #app{position:fixed;inset:0}
+  #app canvas{display:block;width:100%;height:100%}
+  .overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(8,12,10,.84);z-index:20;padding:18px;overflow:auto}
+  .card{max-width:720px;width:100%;background:#141a17;border:1px solid #2c3831;border-radius:16px;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.55)}
+  h1{margin:0 0 6px;font-size:34px;letter-spacing:.5px}
+  h1 span{color:#c8a24a}
+  .tag{color:#aeb8b2;font-size:14px;line-height:1.55}
+  .note{margin:14px 0;padding:12px 14px;background:#1e2823;border:1px solid #334239;border-radius:10px;font-size:13px;line-height:1.55;color:#c9d2cc}
+  .row{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0;align-items:center}
+  label{font-size:13px;color:#aeb8b2}
+  select,button{font:inherit}
+  select{background:#202b25;color:#fff;border:1px solid #3a4a40;border-radius:10px;padding:10px 12px}
+  .btn{background:#c8a24a;color:#111;border:0;border-radius:12px;padding:13px 20px;font-weight:800;cursor:pointer}
+  .btn:hover{filter:brightness(1.08)}
+  .btn.ghost{background:#243029;color:#e8ecea;border:1px solid #3a4a40}
+  h3{margin:18px 0 8px;font-size:15px}
+  ul{margin:0;padding-left:20px;color:#c9d2cc;font-size:14px;line-height:1.65}
+  #hud{position:fixed;inset:0;pointer-events:none;z-index:10;display:none}
+  #hud.on{display:block}
+  #topbar{position:absolute;top:12px;left:12px;right:12px;display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+  .pill{background:rgba(10,15,12,.72);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:9px 12px;font-size:13px;line-height:1.4}
+  #alive{font-weight:800;font-size:17px}
+  #killfeed{position:absolute;top:78px;right:12px;width:270px;display:flex;flex-direction:column;gap:6px;font-size:12px}
+  #killfeed div{background:rgba(10,15,12,.7);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:7px 9px}
+  #cross{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:22px;color:#fff;text-shadow:0 0 6px #000;opacity:.9}
+  #bottom{position:absolute;left:12px;bottom:12px;display:flex;gap:12px;align-items:flex-end}
+  #healthWrap{width:210px}
+  #healthBarOuter{height:14px;background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.2);border-radius:8px;overflow:hidden}
+  #healthBar{height:100%;width:100%;background:#7fb069}
+  #healthText{font-size:13px;margin-top:5px}
+  #ammo{font-size:18px;font-weight:800}
+  #zoneMsg{position:absolute;left:50%;top:64px;transform:translateX(-50%);background:rgba(120,20,20,.78);border-radius:10px;padding:8px 12px;font-size:13px;font-weight:700;display:none;white-space:nowrap}
+  #damage{position:fixed;inset:0;pointer-events:none;box-shadow:inset 0 0 90px 30px rgba(200,20,20,.55);opacity:0;transition:opacity .15s;z-index:9}
+  #minimap{position:absolute;top:78px;left:12px;border:1px solid rgba(255,255,255,.2);border-radius:12px;background:rgba(10,15,12,.72)}
+  .fsbtn{pointer-events:auto;background:rgba(10,15,12,.8);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:10px;padding:10px 12px;cursor:pointer;font-weight:700}
+  #touchUI{position:fixed;inset:0;z-index:11;display:none;pointer-events:none}
+  #touchUI.on{display:block}
+  #joyBase{position:absolute;left:18px;bottom:110px;width:122px;height:122px;border-radius:50%;background:rgba(255,255,255,.10);border:2px solid rgba(255,255,255,.28);pointer-events:auto;touch-action:none}
+  #joyKnob{position:absolute;left:36px;top:36px;width:50px;height:50px;border-radius:50%;background:rgba(255,255,255,.35);border:2px solid rgba(255,255,255,.5)}
+  .tbtn{position:absolute;pointer-events:auto;touch-action:none;border-radius:50%;border:2px solid rgba(255,255,255,.35);background:rgba(20,30,25,.68);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;text-align:center}
+  #fireBtn{right:18px;bottom:150px;width:92px;height:92px;background:rgba(160,40,30,.78);font-size:16px}
+  #jumpBtn{right:124px;bottom:170px;width:60px;height:60px;font-size:11px}
+  #crouchBtn{right:124px;bottom:100px;width:60px;height:60px;font-size:11px}
+  #reloadBtn{right:196px;bottom:130px;width:56px;height:56px;font-size:10px}
+  #weaponBtn{right:196px;bottom:66px;width:56px;height:56px;font-size:10px}
+  #aimBtn{right:18px;bottom:254px;width:60px;height:60px;font-size:11px}
+  #medkitBtn{right:92px;bottom:66px;width:56px;height:56px;font-size:10px}
+  #aimBtn.active,#crouchBtn.active{background:rgba(200,162,74,.75);color:#111}
+  #pauseOverlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:30;display:none;align-items:center;justify-content:center}
+  @media (max-width:640px){h1{font-size:28px}#killfeed{width:185px}#minimap{width:110px;height:110px}#healthWrap{width:145px}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="damage"></div>
+
+<div id="startScreen" class="overlay">
+  <div class="card">
+    <h1>SHADOW<span>STRIKE</span> WEB</h1>
+    <p class="tag">Original 50-player battle-royale-style match: <b>you vs 49 bots</b> on a big open map. Bots fight each other too, so the alive count falls even if you hide. Last one standing wins.</p>
+    <div class="note"><b>Original game — not Free Fire, COD, or any commercial game.</b> ShadowStrike Web is made from scratch with original art, names and map. It is not made by or affiliated with Garena, Activision, or any publisher. Graphics are browser WebGL with realistic-style lighting (High / Ultra settings) — no proprietary upscaling or ray tracing is used, and no real multiplayer is included in this version: the other 49 players are bots, because real human multiplayer needs a live server, which static web hosting cannot provide.</div>
+    <div class="row">
+      <label for="quality">Graphics quality</label>
+      <select id="quality">
+        <option value="performance">Performance — fastest on phones</option>
+        <option value="balanced" selected>Balanced — recommended</option>
+        <option value="high">High</option>
+        <option value="ultra">Ultra — desktop only, may be slower on phones</option>
+      </select>
+      <button class="btn ghost" id="fsStartBtn" type="button">⛶ Full screen</button>
+    </div>
+    <h3>Map zones</h3>
+    <p class="tag">Downtown · Old Port · Factory Row · Hill Town · Farm Fields · Quarry — loot is spread across all of them. Stay inside the shrinking zone ring.</p>
+    <h3>How to play</h3>
+    <ul>
+      <li><b>Desktop:</b> WASD move, mouse aim, click / hold shoot, Space jump, Shift sprint, C crouch, R reload, Q weapon switch, F medkit, right-mouse hold to aim / scope.</li>
+      <li><b>Mobile:</b> Left joystick move, drag right side to aim, FIRE (large), JUMP, CROUCH, RELOAD, WEAPON, AIM and MEDKIT buttons on the right.</li>
+      <li>Pick up health, ammo, medkits and better weapons. Placement is shown when you are eliminated — #1 is a win.</li>
+    </ul>
+    <div class="row"><button class="btn" id="startBtn" type="button">▶ &nbsp;DROP IN — 50 PLAYERS</button></div>
+    <p class="tag">Tip: on a phone, tap Full screen first, then Drop In. Balanced quality is recommended on phones.</p>
+  </div>
+</div>
+
+<div id="hud">
+  <div id="topbar">
+    <div class="pill"><span id="alive">Alive: 50</span><br><span id="kills">Kills: 0</span> · <span id="timer">0:00</span></div>
+    <div class="pill" id="zonePill">Zone: safe</div>
+    <button class="fsbtn" id="fsBtn" type="button">⛶ Full screen</button>
+  </div>
+  <canvas id="minimap" width="140" height="140"></canvas>
+  <div id="killfeed"></div>
+  <div id="cross">+</div>
+  <div id="zoneMsg">⚠ ZONE SHRINKING — MOVE INSIDE THE RING</div>
+  <div id="bottom">
+    <div id="healthWrap"><div id="healthBarOuter"><div id="healthBar"></div></div><div id="healthText">Health 100</div></div>
+    <div class="pill"><span id="ammo">Ammo 30 / 120</span><br><span id="weapon">Mk I Rifle</span> · <span id="medkits">Medkits: 1</span></div>
+  </div>
+</div>
+
+<div id="touchUI">
+  <div id="joyBase"><div id="joyKnob"></div></div>
+  <button class="tbtn" id="aimBtn" type="button">AIM</button>
+  <button class="tbtn" id="fireBtn" type="button">FIRE</button>
+  <button class="tbtn" id="jumpBtn" type="button">JUMP</button>
+  <button class="tbtn" id="crouchBtn" type="button">CROUCH</button>
+  <button class="tbtn" id="reloadBtn" type="button">RELOAD</button>
+  <button class="tbtn" id="weaponBtn" type="button">WEAPON</button>
+  <button class="tbtn" id="medkitBtn" type="button">MEDKIT</button>
+</div>
+
+<div id="pauseOverlay"><div class="card" style="max-width:420px;text-align:center"><h3>Game paused</h3><p class="tag">Click Resume to lock the mouse and keep playing.</p><button class="btn" id="resumeBtn" type="button">Resume</button></div></div>
+
+<div id="endScreen" class="overlay" style="display:none">
+  <div class="card" style="text-align:center">
+    <h1 id="endTitle">VICTORY</h1>
+    <p class="tag" id="endStats"></p>
+    <div class="row" style="justify-content:center"><button class="btn" id="restartBtn" type="button">↻ Play again</button></div>
+  </div>
+</div>
+
+<script type="module" src="./game.js"></script>
+</body>
+</html>
