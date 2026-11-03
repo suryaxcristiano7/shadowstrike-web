@@ -57,6 +57,28 @@
   #medkitBtn{right:92px;bottom:66px;width:56px;height:56px;font-size:10px}
   #aimBtn.active,#crouchBtn.active{background:rgba(200,162,74,.75);color:#111}
   #pauseOverlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:30;display:none;align-items:center;justify-content:center}
+  #rotateOverlay{position:fixed;inset:0;background:#0b0f0d;z-index:50;display:none;align-items:center;justify-content:center;text-align:center;padding:24px}
+  #rotateOverlay.on{display:flex}
+  #rotateOverlay .rotIcon{font-size:64px;margin-bottom:10px}
+  #rotateOverlay h2{margin:6px 0;font-size:28px}
+  #rotateOverlay p{color:#aeb8b2;line-height:1.6;max-width:420px;margin:8px auto 18px}
+  @media (orientation:landscape) and (max-height:520px){
+    #topbar{top:8px;left:8px;right:8px}
+    #minimap{top:56px;left:8px;width:104px;height:104px}
+    #killfeed{top:56px;right:8px;width:190px}
+    #bottom{left:8px;bottom:8px}
+    #healthWrap{width:150px}
+    #joyBase{left:14px;bottom:74px;width:104px;height:104px}
+    #joyKnob{left:30px;top:30px;width:44px;height:44px}
+    #fireBtn{right:14px;bottom:104px;width:76px;height:76px;font-size:15px}
+    #aimBtn{right:14px;bottom:188px;width:52px;height:52px;font-size:10px}
+    #jumpBtn{right:100px;bottom:122px;width:52px;height:52px;font-size:10px}
+    #crouchBtn{right:100px;bottom:66px;width:52px;height:52px;font-size:10px}
+    #reloadBtn{right:162px;bottom:92px;width:48px;height:48px;font-size:9px}
+    #weaponBtn{right:162px;bottom:40px;width:48px;height:48px;font-size:9px}
+    #medkitBtn{right:214px;bottom:40px;width:48px;height:48px;font-size:9px}
+    .card{padding:18px}
+  }
   @media (max-width:640px){h1{font-size:28px}#killfeed{width:185px}#minimap{width:110px;height:110px}#healthWrap{width:145px}}
 </style>
 </head>
@@ -88,7 +110,7 @@
       <li>Pick up health, ammo, medkits and better weapons. Placement is shown when you are eliminated — #1 is a win.</li>
     </ul>
     <div class="row"><button class="btn" id="startBtn" type="button">▶ &nbsp;DROP IN — 50 PLAYERS</button></div>
-    <p class="tag">Tip: on a phone, tap Full screen first, then Drop In. Balanced quality is recommended on phones.</p>
+    <p class="tag">Tip: on a phone, play in landscape — turn your phone sideways, tap Full screen, then Drop In. Balanced quality is recommended on phones.</p>
   </div>
 </div>
 
@@ -128,6 +150,8 @@
     <div class="row" style="justify-content:center"><button class="btn" id="restartBtn" type="button">↻ Play again</button></div>
   </div>
 </div>
+
+<div id="rotateOverlay"><div><div class="rotIcon">⟲</div><h2>Rotate your phone</h2><p>ShadowStrike plays in landscape mode. Turn your phone sideways to continue — the game will unlock as soon as it is wide.</p><button class="btn" id="rotateFsBtn" type="button">⛶ Full screen + landscape</button></div></div>
 
 <script type="module" src="./game.js"></script>
 </body>
