@@ -90,7 +90,7 @@
   <div class="card">
     <h1>SHADOW<span>STRIKE</span> WEB</h1>
     <p class="tag">Original 50-player battle-royale-style match: <b>you vs 49 bots</b> on a big open map. Bots fight each other too, so the alive count falls even if you hide. Last one standing wins.</p>
-    <div class="note"><b>Original game — not Free Fire, COD, or any commercial game.</b> ShadowStrike Web is made from scratch with original art, names and map. It is not made by or affiliated with Garena, Activision, or any publisher. Graphics are browser WebGL with realistic-style lighting (High / Ultra settings) — no proprietary upscaling or ray tracing is used, and no real multiplayer is included in this version: the other 49 players are bots, because real human multiplayer needs a live server, which static web hosting cannot provide.</div>
+    <div class="note"><b>Original game — not Free Fire, COD, or any commercial game.</b> ShadowStrike Web is made from scratch with original art, names and map. It is not made by or affiliated with Garena, Activision, or any publisher. Graphics are browser WebGL2 with PBR materials, soft shadows and ACES tone mapping — bloom-style glow is on High / Ultra only and off on Performance / Balanced for phones. No proprietary upscaling or ray tracing is used, and no WebGPU renderer is bundled in this build (see README for why), and no real multiplayer is included in this version: the other 49 players are bots, because real human multiplayer needs a live server, which static web hosting cannot provide.</div>
     <div class="row">
       <label for="quality">Graphics quality</label>
       <select id="quality">
@@ -110,7 +110,7 @@
       <li>Pick up health, ammo, medkits and better weapons. Placement is shown when you are eliminated — #1 is a win.</li>
     </ul>
     <div class="row"><button class="btn" id="startBtn" type="button">▶ &nbsp;DROP IN — 50 PLAYERS</button></div>
-    <p class="tag">Tip: on a phone, play in landscape — turn your phone sideways, tap Full screen, then Drop In. Balanced quality is recommended on phones.</p>
+    <p class="tag">Tip: on a phone, play in landscape — turn your phone sideways, tap Full screen, then Drop In. Balanced quality is recommended on phones. Ultra is desktop-only and may be slow on phones.</p>
   </div>
 </div>
 
