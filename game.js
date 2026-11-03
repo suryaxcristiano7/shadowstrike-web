@@ -83,8 +83,8 @@ function canvasTex(w, h, draw, repeatX, repeatY){
 }
 function groundTexture(){
   return canvasTex(512, 512, (g)=>{
-    g.fillStyle = '#55613f'; g.fillRect(0,0,512,512);
-    const greens = ['#4a5a36','#5d6b43','#42522f','#67784a','#3e4c2e','#6b7a4e'];
+    g.fillStyle = '#5f7a2e'; g.fillRect(0,0,512,512);
+    const greens = ['#6fae2e','#8ac43a','#4f8a22','#a5d14a','#3f7a1e','#c2e05a'];
     for(let i=0;i<2600;i++){
       g.fillStyle = greens[Math.floor(Math.random()*greens.length)];
       g.globalAlpha = 0.25 + Math.random()*0.35;
@@ -93,7 +93,7 @@ function groundTexture(){
     }
     g.globalAlpha = 1;
     for(let i=0;i<42;i++){
-      g.fillStyle = 'rgba(104,88,60,0.30)';
+      g.fillStyle = 'rgba(160,110,50,0.38)';
       g.beginPath(); g.ellipse(Math.random()*512, Math.random()*512, 14+Math.random()*44, 9+Math.random()*26, Math.random()*3, 0, 7); g.fill();
     }
     for(let i=0;i<900;i++){ g.fillStyle = 'rgba(30,40,22,0.35)'; g.fillRect(Math.random()*512, Math.random()*512, 1.5, 3); }
@@ -109,8 +109,8 @@ function barkTexture(){
 }
 function foliageTexture(){
   return canvasTex(256, 256, (g)=>{
-    g.fillStyle = '#2f4428'; g.fillRect(0,0,256,256);
-    const greens = ['#243a20','#3a552f','#466b36','#1f331c','#557a3c','#2e4a26'];
+    g.fillStyle = '#2e6b1e'; g.fillRect(0,0,256,256);
+    const greens = ['#2e8a1e','#5ac02e','#7ed14a','#1e6b12','#9ad94a','#3a9a28'];
     for(let i=0;i<1800;i++){ g.fillStyle = greens[Math.floor(Math.random()*greens.length)]; g.globalAlpha = 0.5; g.beginPath(); g.arc(Math.random()*256, Math.random()*256, 2+Math.random()*7, 0, 7); g.fill(); }
     g.globalAlpha = 1;
   });
@@ -137,8 +137,8 @@ function buildingSideTexture(variant){
     g.fillStyle = p.trim; g.fillRect(0, 0, 256, 10); g.fillRect(0, 246, 256, 10);
     for(let r=0;r<4;r++) for(let cI=0;cI<4;cI++){
       const x = 18 + cI*60, y = 26 + r*56;
-      const lit = Math.random() < 0.22;
-      g.fillStyle = lit ? p.lit : p.win; g.fillRect(x, y, 34, 30);
+      const lit = Math.random() < 0.38;
+      g.fillStyle = lit ? p.lit : p.win; g.fillRect(x, y, 38, 34);
       g.fillStyle = 'rgba(255,255,255,0.18)'; g.fillRect(x, y, 34, 4);
       g.strokeStyle = 'rgba(0,0,0,0.45)'; g.strokeRect(x, y, 34, 30);
       g.beginPath(); g.moveTo(x+17, y); g.lineTo(x+17, y+30); g.stroke();
@@ -169,7 +169,7 @@ function skyTexture(){
   const c = document.createElement('canvas'); c.width = 16; c.height = 512;
   const g = c.getContext('2d');
   const grad = g.createLinearGradient(0, 0, 0, 512);
-  grad.addColorStop(0, '#6f9cc0'); grad.addColorStop(0.45, '#a8c2cf'); grad.addColorStop(0.72, '#d8cfae'); grad.addColorStop(1, '#e8ddc0');
+  grad.addColorStop(0, '#1e3a7a'); grad.addColorStop(0.35, '#7a5aa8'); grad.addColorStop(0.62, '#e0703a'); grad.addColorStop(0.85, '#ff9e4a'); grad.addColorStop(1, '#ffd9a0');
   g.fillStyle = grad; g.fillRect(0,0,16,512);
   const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
 }
@@ -258,6 +258,7 @@ function makeCharacter(color){
     const leg = new THREE.Mesh(new THREE.BoxGeometry(0.26,0.62,0.30), pantsMat); leg.position.set(x*0.62, 0.41, 0); leg.castShadow = true; grp.add(leg);
     const boot = new THREE.Mesh(new THREE.BoxGeometry(0.27,0.18,0.42), bootMat); boot.position.set(x*0.62, 0.09, 0.05); grp.add(boot);
   });
+  const chestPlate = new THREE.Mesh(new THREE.BoxGeometry(0.52,0.22,0.06), new THREE.MeshStandardMaterial({color:0xff8c2a, roughness:0.6})); chestPlate.position.set(0, 1.22, 0.22); grp.add(chestPlate);
   const gunGrp = new THREE.Group();
   const gunMat = new THREE.MeshStandardMaterial({color:0x17191a, roughness:0.38, metalness:0.65, roughnessMap: roughTex()});
   const body = new THREE.Mesh(new THREE.BoxGeometry(0.12,0.16,0.62), gunMat); gunGrp.add(body);
@@ -267,6 +268,7 @@ function makeCharacter(color){
   const guard = new THREE.Mesh(new THREE.CylinderGeometry(0.055,0.055,0.30,8), gunMat); guard.rotation.x = Math.PI/2; guard.position.set(0, 0.02, 0.32); gunGrp.add(guard);
   const sight = new THREE.Mesh(new THREE.BoxGeometry(0.04,0.09,0.04), gunMat); sight.position.set(0, 0.12, 0.58); gunGrp.add(sight);
   const stock = new THREE.Mesh(new THREE.BoxGeometry(0.11,0.14,0.18), gunMat); stock.position.set(0, 0, -0.38); gunGrp.add(stock);
+  const gunTip = new THREE.Mesh(new THREE.BoxGeometry(0.07,0.07,0.10), new THREE.MeshStandardMaterial({color:0xff8c2a, roughness:0.5})); gunTip.position.set(0, 0.02, 0.72); gunGrp.add(gunTip);
   gunGrp.position.set(0.30, 1.22, 0.48); grp.add(gunGrp);
   grp.userData.gun = gunGrp; return grp;
 }
@@ -312,7 +314,7 @@ function init(){
   renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, q.pr));
   renderer.setSize(innerWidth, innerHeight);
   renderer.shadowMap.enabled = q.shadow>0; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-  renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.15;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.35;
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   $('app').appendChild(renderer.domElement);
   scene = new THREE.Scene();
@@ -328,11 +330,11 @@ function init(){
       cl.scale.set(90 + Math.random()*110, 40 + Math.random()*40, 1); scene.add(cl);
     }
   }
-  scene.fog = new THREE.Fog(0xaebfc0, 70, 340);
+  scene.fog = new THREE.Fog(0xd99a6a, 60, 300);
   camera = new THREE.PerspectiveCamera(62, innerWidth/innerHeight, 0.1, 700);
   clock = new THREE.Clock();
-  scene.add(new THREE.HemisphereLight(0xcfe0ea, 0x4a5240, 1.05));
-  sun = new THREE.DirectionalLight(0xffeec4, 1.9);
+  scene.add(new THREE.HemisphereLight(0xffd9a8, 0x5a4a35, 1.15));
+  sun = new THREE.DirectionalLight(0xffb45e, 2.4);
   sun.position.set(60,90,30); sun.castShadow = q.shadow>0;
   if(q.shadow>0){ sun.shadow.mapSize.set(q.shadow,q.shadow); const s=95; sun.shadow.camera.left=-s; sun.shadow.camera.right=s; sun.shadow.camera.top=s; sun.shadow.camera.bottom=-s; sun.shadow.camera.far=400; }
   scene.add(sun); scene.add(sun.target);
@@ -376,7 +378,7 @@ function init(){
   const leafIM2 = new THREE.InstancedMesh(leafGeo2, pbr(foliageTexture(), 1, 0, 0.02), treePos.length);
   const dummy = new THREE.Object3D(); const col = new THREE.Color();
   const leafGreens = [0xffffff, 0xd8e8c8, 0xb8d0a0, 0x9fc488, 0xe8f0d8];
-  treePos.forEach((p,i)=>{ const s = 0.85 + Math.random()*0.45;
+  treePos.forEach((p,i)=>{ const s = 1.25 + Math.random()*0.65;
     dummy.position.set(p[0],1.2*s,p[1]); dummy.scale.set(s,s,s); dummy.updateMatrix(); trunkIM.setMatrixAt(i,dummy.matrix);
     dummy.position.set(p[0],3.9*s,p[1]); dummy.updateMatrix(); leafIM.setMatrixAt(i,dummy.matrix); leafIM.setColorAt(i, col.setHex(leafGreens[i % leafGreens.length]));
     dummy.position.set(p[0],5.5*s,p[1]); dummy.updateMatrix(); leafIM2.setMatrixAt(i,dummy.matrix); leafIM2.setColorAt(i, col.setHex(leafGreens[(i+2) % leafGreens.length]));
@@ -387,7 +389,7 @@ function init(){
   if(rockIM.instanceColor) rockIM.instanceColor.needsUpdate = true;
   const leafGeo3 = new THREE.SphereGeometry(1.35, 8, 6);
   const leafIM3 = new THREE.InstancedMesh(leafGeo3, pbr(foliageTexture(), 1, 0, 0.02), treePos.length);
-  treePos.forEach((p,i)=>{ const s = 0.85 + Math.random()*0.45; dummy.position.set(p[0], 5.9*s, p[1]); dummy.scale.set(s, s*0.8, s); dummy.updateMatrix(); leafIM3.setMatrixAt(i, dummy.matrix); leafIM3.setColorAt(i, col.setHex(leafGreens[(i+1) % leafGreens.length])); dummy.scale.set(1,1,1); });
+  treePos.forEach((p,i)=>{ const s = 1.25 + Math.random()*0.65; dummy.position.set(p[0], 5.9*s, p[1]); dummy.scale.set(s, s*0.8, s); dummy.updateMatrix(); leafIM3.setMatrixAt(i, dummy.matrix); leafIM3.setColorAt(i, col.setHex(leafGreens[(i+1) % leafGreens.length])); dummy.scale.set(1,1,1); });
   if(leafIM3.instanceColor) leafIM3.instanceColor.needsUpdate = true;
   trunkIM.castShadow = true; leafIM.castShadow = true; leafIM2.castShadow = true; leafIM3.castShadow = true; scene.add(trunkIM); scene.add(leafIM); scene.add(leafIM2); scene.add(leafIM3);
   const rockPos = [];

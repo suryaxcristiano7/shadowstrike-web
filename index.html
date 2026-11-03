@@ -57,6 +57,8 @@
   #medkitBtn{right:92px;bottom:66px;width:56px;height:56px;font-size:10px}
   #aimBtn.active,#crouchBtn.active{background:rgba(200,162,74,.75);color:#111}
   #pauseOverlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:30;display:none;align-items:center;justify-content:center}
+  .vstamp{display:inline-block;background:#ff8c2a;color:#111;font-weight:900;font-size:20px;letter-spacing:1px;border-radius:10px;padding:6px 12px;margin-left:10px;vertical-align:middle;box-shadow:0 0 18px rgba(255,140,42,.7)}
+  .vstampHud{display:inline-block;background:#ff8c2a;color:#111;font-weight:900;font-size:12px;border-radius:8px;padding:3px 8px;margin-left:8px}
   #rotateOverlay{position:fixed;inset:0;background:#0b0f0d;z-index:50;display:none;align-items:center;justify-content:center;text-align:center;padding:24px}
   #rotateOverlay.on{display:flex}
   #rotateOverlay .rotIcon{font-size:64px;margin-bottom:10px}
@@ -88,9 +90,10 @@
 
 <div id="startScreen" class="overlay">
   <div class="card">
-    <h1>SHADOW<span>STRIKE</span> WEB</h1>
+    <h1>SHADOW<span>STRIKE</span> WEB<span class="vstamp">v4</span></h1>
+    <p class="tag"><b style="color:#ff8c2a">v4 — SUNSET UPDATE:</b> warmer sunset lighting, brighter saturated world, bigger trees and clearer buildings. If you do not see v4 here, hard-refresh / open in a private tab — you are on a cached old version.</p>
     <p class="tag">Original 50-player battle-royale-style match: <b>you vs 49 bots</b> on a big open map. Bots fight each other too, so the alive count falls even if you hide. Last one standing wins.</p>
-    <div class="note"><b>Original game — not Free Fire, COD, or any commercial game.</b> ShadowStrike Web is made from scratch with original art, names and map. It is not made by or affiliated with Garena, Activision, or any publisher. Graphics are browser WebGL2 with PBR materials, soft shadows and ACES tone mapping — bloom-style glow is on High / Ultra only and off on Performance / Balanced for phones. No proprietary upscaling or ray tracing is used, and no WebGPU renderer is bundled in this build (see README for why), and no real multiplayer is included in this version: the other 49 players are bots, because real human multiplayer needs a live server, which static web hosting cannot provide.</div>
+    <div class="note"><b>Original game — not Free Fire, COD, or any commercial game.</b> ShadowStrike Web is made from scratch with original art, names and map. It is not made by or affiliated with Garena, Activision, or any publisher. Graphics are browser WebGL2 with PBR materials, soft shadows and ACES tone mapping — v4 adds a warm sunset look, saturated textures and bigger trees that are visible on Balanced too (bloom-style glow stays High / Ultra only, for phones). No proprietary upscaling or ray tracing is used, and no WebGPU renderer is bundled in this build (see README for why), and no real multiplayer is included in this version: the other 49 players are bots, because real human multiplayer needs a live server, which static web hosting cannot provide.</div>
     <div class="row">
       <label for="quality">Graphics quality</label>
       <select id="quality">
@@ -116,7 +119,7 @@
 
 <div id="hud">
   <div id="topbar">
-    <div class="pill"><span id="alive">Alive: 50</span><br><span id="kills">Kills: 0</span> · <span id="timer">0:00</span></div>
+    <div class="pill"><span id="alive">Alive: 50</span><span class="vstampHud">v4</span><br><span id="kills">Kills: 0</span> · <span id="timer">0:00</span></div>
     <div class="pill" id="zonePill">Zone: safe</div>
     <button class="fsbtn" id="fsBtn" type="button">⛶ Full screen</button>
   </div>
@@ -153,6 +156,6 @@
 
 <div id="rotateOverlay"><div><div class="rotIcon">⟲</div><h2>Rotate your phone</h2><p>ShadowStrike plays in landscape mode. Turn your phone sideways to continue — the game will unlock as soon as it is wide.</p><button class="btn" id="rotateFsBtn" type="button">⛶ Full screen + landscape</button></div></div>
 
-<script type="module" src="./game.js"></script>
+<script type="module" src="./game.js?v=4"></script>
 </body>
 </html>
